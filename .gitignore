@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+bin/
+vendor/pkg
+vendor/src/github.com/ghmlee
