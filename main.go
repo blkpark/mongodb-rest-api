@@ -17,7 +17,6 @@ import (
 var (
     port = getEnv("PORT", "8888")
     host = getEnv("HOST", "127.0.0.1")
-    client = newMongoDB()
 )
 
 // to get an environment variable if it exists or default value
@@ -46,7 +45,7 @@ func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
 			mux.Vars(r),
 			body,
 			queryParams,
-            client,
+            newMongoDB(),
 		}
         
 		var js []byte
