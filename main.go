@@ -34,10 +34,11 @@ func newMongoDB() *mongodb.MongoDB {
     return m
 }
 
-// A middleware to serve a context struct
 type MuxHandler func(context.Context, http.ResponseWriter, *http.Request) (int, map[string]interface{})
 
+// A middleware to serve a context struct
 func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
+    m := newMongoDB()
 	return (func(w http.ResponseWriter, r *http.Request) {
 		body, _ := ioutil.ReadAll(r.Body)
 		queryParams := r.URL.Query()
@@ -45,7 +46,7 @@ func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
 			mux.Vars(r),
 			body,
 			queryParams,
-            newMongoDB(),
+            m,
 		}
         
 		var js []byte
