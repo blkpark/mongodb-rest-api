@@ -34,7 +34,7 @@ func newMongoDB() *mongodb.MongoDB {
     return m
 }
 
-type MuxHandler func(context.Context, http.ResponseWriter, *http.Request) (int, map[string]interface{})
+type MuxHandler func(context.Context, http.ResponseWriter, *http.Request) (int, interface{})
 
 // A middleware to serve a context struct
 func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
@@ -75,6 +75,8 @@ func run() {
 	mux := mux.NewRouter()
 
     mux.HandleFunc("/{database}/{collection}", serveContext(route.PostDocument)).Methods("POST")
+    mux.HandleFunc("/{database}/{collection}", serveContext(route.GetDocuments)).Methods("GET")
+    mux.HandleFunc("/{database}/{collection}", serveContext(route.DeleteDocuments)).Methods("DELETE")
 
 	http.Handle("/", mux)
 	http.ListenAndServe(":" + port, nil)
