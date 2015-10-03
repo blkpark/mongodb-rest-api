@@ -61,7 +61,7 @@ func (m *MongoDB) PutDocument(database string, collection string, query interfac
     return nil
 }
 
-func (m *MongoDB) GetDocuments(database string, collection string, query interface{}, skip int, limit int) (interface{}, error) {
+func (m *MongoDB) GetDocuments(database string, collection string, query interface{}, sort string, skip int, limit int) (interface{}, error) {
     if m == nil {
         return nil, errors.New("The mongodb session does not exist.")
     }
@@ -74,7 +74,7 @@ func (m *MongoDB) GetDocuments(database string, collection string, query interfa
 
     var result []interface{}
     
-    err := c.Find(query).Skip(skip).Limit(limit).Iter().All(&result)
+    err := c.Find(query).Sort(sort).Skip(skip).Limit(limit).Iter().All(&result)
 
     // error
     if err != nil && err.Error() != "not found" {

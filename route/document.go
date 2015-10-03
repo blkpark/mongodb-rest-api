@@ -98,6 +98,7 @@ func GetDocuments(
 
     skip := c.GetQueryParam("skip", "0")
     limit := c.GetQueryParam("limit", "1")
+    sort := c.GetQueryParam("sort", "-_id")
 
     // skip
     s, err := strconv.ParseUint(skip, 10, 64)
@@ -121,13 +122,14 @@ func GetDocuments(
 
     delete(c.QueryParams, "limit")
     delete(c.QueryParams, "skip")
+    delete(c.QueryParams, "sort")
 
     var query = make(map[string]string)
     for k := range c.QueryParams {
         query[k] = c.GetQueryParam(k, "")
     }
 
-    result, err := c.MongoDB.GetDocuments(db, col, query, int(s), int(l))
+    result, err := c.MongoDB.GetDocuments(db, col, query, sort, int(s), int(l))
     if err != nil {
         status = http.StatusInternalServerError
         res = map[string]interface{}{
