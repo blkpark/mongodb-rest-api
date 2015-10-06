@@ -8,32 +8,31 @@ import (
 
 type MongoDB struct {
     session *mgo.Session
-    database *mgo.Database
 }
 
-func NewMongoDB(host string, database string) (*MongoDB, error) {
+func NewMongoDB(host string) (*MongoDB, error) {
     s, err := mgo.Dial(host)
     if err != nil {
         return nil, err
     }
 
-    d := s.DB(database)
-
     m := MongoDB{
         session: s,
-        database: d,
     }
 
     return &m, nil
 }
 
-func (m *MongoDB) NewDocument(collection string, document interface{}) error {
-    if m == nil || m.database == nil {
-        return errors.New("The database does not exist.")
+func (m *MongoDB) NewDocument(database string, collection string, document interface{}) error {
+    if m == nil {
+        return errors.New("The mongodb session does not exist.")
     }
+    
+    // database
+    d := m.session.DB(database)
 
     // collection
-    c := m.database.C(collection)
+    c := d.C(collection)
 
     var result interface{}
     err := c.Find(document).One(&result)

@@ -17,7 +17,6 @@ import (
 var (
     port = getEnv("PORT", "8888")
     host = getEnv("HOST", "127.0.0.1")
-    db = getEnv("DATABASE", "default")
     client = newMongoDB()
 )
 
@@ -32,7 +31,7 @@ func getEnv(key, defaultValue string) string {
 }
 
 func newMongoDB() *mongodb.MongoDB {
-    m, _ := mongodb.NewMongoDB(host, db)
+    m, _ := mongodb.NewMongoDB(host)
     return m
 }
 
@@ -75,7 +74,7 @@ func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
 func run() {
 	mux := mux.NewRouter()
 
-    mux.HandleFunc("/{collection}", serveContext(route.PostDocument)).Methods("POST")
+    mux.HandleFunc("/{database}/{collection}", serveContext(route.PostDocument)).Methods("POST")
 
 	http.Handle("/", mux)
 	http.ListenAndServe(":" + port, nil)

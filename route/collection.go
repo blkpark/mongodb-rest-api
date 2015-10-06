@@ -15,6 +15,7 @@ func PostDocument(
     var res map[string]interface{}
 
     // collection
+    db := c.Params["database"]
     col := c.Params["collection"]
 
     // param
@@ -28,7 +29,7 @@ func PostDocument(
         return status, res
     }
 
-    err = c.MongoDB.NewDocument(col, param)
+    err = c.MongoDB.NewDocument(db, col, param)
     if err != nil {
         status = http.StatusInternalServerError
         res = map[string]interface{}{
