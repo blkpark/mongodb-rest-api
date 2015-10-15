@@ -124,9 +124,17 @@ func GetDocuments(
     delete(c.QueryParams, "skip")
     delete(c.QueryParams, "sort")
 
-    var query = make(map[string]string)
+    var query = make(map[string]interface{})
     for k := range c.QueryParams {
         query[k] = c.GetQueryParam(k, "")
+
+        v := c.GetQueryParam(k, "")
+        i, err := strconv.ParseUint(v, 10, 64)
+        if err == nil {
+            query[k] = i
+        } else {
+            query[k] = v
+        }
     }
 
     result, err := c.MongoDB.GetDocuments(db, col, query, sort, int(s), int(l))
