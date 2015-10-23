@@ -74,9 +74,13 @@ func serveContext(next MuxHandler) func(http.ResponseWriter, *http.Request) {
 func run() {
 	mux := mux.NewRouter()
 
+    mux.HandleFunc("/{database}/{collection}/", serveContext(route.PostDocument)).Methods("POST")
     mux.HandleFunc("/{database}/{collection}", serveContext(route.PostDocument)).Methods("POST")
+    mux.HandleFunc("/{database}/{collection}/", serveContext(route.PutDocument)).Methods("PUT")
     mux.HandleFunc("/{database}/{collection}", serveContext(route.PutDocument)).Methods("PUT")
+    mux.HandleFunc("/{database}/{collection}/", serveContext(route.GetDocuments)).Methods("GET")
     mux.HandleFunc("/{database}/{collection}", serveContext(route.GetDocuments)).Methods("GET")
+    mux.HandleFunc("/{database}/{collection}/", serveContext(route.DeleteDocuments)).Methods("DELETE")
     mux.HandleFunc("/{database}/{collection}", serveContext(route.DeleteDocuments)).Methods("DELETE")
 
 	http.Handle("/", mux)
