@@ -4,6 +4,8 @@ import (
     "strconv"
     "net/http"
     "encoding/json"
+
+    "gopkg.in/mgo.v2/bson"
     
     "github.com/ghmlee/mongodb-rest-api/context"
 )
@@ -55,6 +57,8 @@ func PutDocument(
     db := c.Params["database"]
     col := c.Params["collection"]
 
+    id := c.GetQueryParam("_id", "")
+
     // doc
     var doc interface{}
     err := json.Unmarshal(c.Body, &doc)
@@ -66,9 +70,15 @@ func PutDocument(
         return status, res
     }
 
-    var query = make(map[string]string)
+    delete(c.QueryParams, "_id")
+
+    var query = make(map[string]interface{})
     for k := range c.QueryParams {
         query[k] = c.GetQueryParam(k, "")
+    }
+
+    if id != "" {
+        query["_id"] = bson.ObjectIdHex(id)
     }
 
     err = c.MongoDB.PutDocument(db, col, query, doc)
@@ -96,6 +106,7 @@ func GetDocuments(
     db := c.Params["database"]
     col := c.Params["collection"]
 
+    id := c.GetQueryParam("_id", "")
     skip := c.GetQueryParam("skip", "0")
     limit := c.GetQueryParam("limit", "1")
     sort := c.GetQueryParam("sort", "-_id")
@@ -120,6 +131,7 @@ func GetDocuments(
         return status, res
     }
 
+    delete(c.QueryParams, "_id")
     delete(c.QueryParams, "limit")
     delete(c.QueryParams, "skip")
     delete(c.QueryParams, "sort")
@@ -135,6 +147,10 @@ func GetDocuments(
         } else {
             query[k] = v
         }
+    }
+
+    if id != "" {
+        query["_id"] = bson.ObjectIdHex(id)
     }
 
     result, err := c.MongoDB.GetDocuments(db, col, query, sort, int(s), int(l))
@@ -162,9 +178,17 @@ func DeleteDocuments(
     db := c.Params["database"]
     col := c.Params["collection"]
 
-    var query = make(map[string]string)
+    id := c.GetQueryParam("_id", "")
+
+    delete(c.QueryParams, "_id")
+
+    var query = make(map[string]interface{})
     for k := range c.QueryParams {
         query[k] = c.GetQueryParam(k, "")
+    }
+
+    if id != "" {
+        query["_id"] = bson.ObjectIdHex(id)
     }
 
     err := c.MongoDB.DeleteDocuments(db, col, query)
