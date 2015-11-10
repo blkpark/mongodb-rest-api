@@ -53,7 +53,7 @@ func (m *MongoDB) PutDocument(database string, collection string, query interfac
     // collection
     c := d.C(collection)
 
-    err := c.Update(query, document)
+    _, err := c.Upsert(query, document)
     if err != nil {
         return err
     }
