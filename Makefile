@@ -1,7 +1,7 @@
 MAKEFILE := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT := $(dir $(MAKEFILE))
 GOPATH := $(PROJECT)/vendor
-VENDOR := $(GOPATH)/src/github.com/ghmlee/mongodb-rest-api
+VENDOR := $(GOPATH)/src/github.com/blakepark/mongodb-rest-api
 BIN := mongodb-rest-api
 
 export PROJECT

@@ -16,7 +16,7 @@ import (
 
 var (
     port = getEnv("PORT", "8888")
-    host = getEnv("HOST", "127.0.0.1")
+    host = getEnv("HOST", "192.168.99.100")
 )
 
 // to get an environment variable if it exists or default value
