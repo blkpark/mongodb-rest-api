@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"encoding/json"
 
-    "github.com/ghmlee/mongodb-rest-api/context"
-    "github.com/ghmlee/mongodb-rest-api/route"
-    "github.com/ghmlee/mongodb-rest-api/mongodb"
+    "github.com/blakepark/mongodb-rest-api/context"
+    "github.com/blakepark/mongodb-rest-api/route"
+    "github.com/blakepark/mongodb-rest-api/mongodb"
 
 	"github.com/gorilla/mux"
 )

@@ -1,7 +1,7 @@
 package context
 
 import (
-    "github.com/ghmlee/mongodb-rest-api/mongodb"
+    "github.com/blakepark/mongodb-rest-api/mongodb"
 )
 
 type Context struct {

@@ -7,7 +7,7 @@ import (
 
     "gopkg.in/mgo.v2/bson"
     
-    "github.com/ghmlee/mongodb-rest-api/context"
+    "github.com/blakepark/mongodb-rest-api/context"
 )
 
 func PostDocument(
